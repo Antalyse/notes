@@ -1,4 +1,4 @@
-# Notes by Antalyse
+# Notes
 
 A simple, yet effective, web-based application for creating, managing, and organizing your personal notes. Built with Python (Flask) and a clean, modern user interface.
 
@@ -17,14 +17,48 @@ A simple, yet effective, web-based application for creating, managing, and organ
 * **Toast Notifications:** Get feedback on actions like saving, deleting, or errors.
 
 
-## Getting Started
+## Getting Started (Docker)
+
+**Use Docker and a Local Database**
+```bash
+docker run -p 5000:5000 -v /my/path:/app/instance -e DATABASE_TYPE=LOCAL antalyse/notes
+```
+
+**Use Docker and a Postgres Database**
+```bash
+docker run -p 5000:5000 \
+  -e DATABASE_TYPE=POSTGRES \
+  -e DB_SERVICE=<your_db_service_host> \
+  -e DB_NAME=<your_db_name> \
+  -e DB_USER=<your_db_user> \
+  -e DB_PORT=<your_db_port> \
+  -e DB_PASSWORD=<your_db_password> \
+  antalyse/notes
+
+```
+
+## Getting Started (Kubernetes)
+
+**Use a (local) Database inside the pod (not recommended)**
+```bash
+kubectl apply -f ./kubernetes/
+```
+
+**Use a Postgres Database**
+Update the configmap.yaml and the secrets.yaml file with your values
+```bash
+kubectl apply -f ./kubernetes/
+```
+
+## Getting Started (Local)
 
 ### Prerequisites
 
 * Python 3.x
 * pip (Python package installer)
 
-### Installation & Running
+### Installation & Running (Local)
+
 
 1.  **Clone the repository:**
     ```bash
