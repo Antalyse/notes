@@ -68,7 +68,7 @@ kubectl apply -f ./kubernetes/
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/antalyse/notes.git](https://github.com/antalyse/notes.git)
+    git clone https://github.com/antalyse/notes.git
     cd notes
     ```
 
