@@ -2,6 +2,8 @@
 
 A simple, yet effective, web-based application for creating, managing, and organizing your personal notes. Built with Python (Flask) and a clean, modern user interface.
 
+![Dashboard View](templates/images/dashboard.png)
+
 ## Features
 
 * **User Authentication:** Secure registration and login system to keep your notes private.
