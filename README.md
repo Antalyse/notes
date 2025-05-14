@@ -39,14 +39,20 @@ docker run -p 5000:5000 \
 
 ## Getting Started (Kubernetes)
 
+Uses Let's Encrypt Certbot for SSL Certificate
+
 **Use a (local) Database inside the pod (not recommended)**
 ```bash
 kubectl apply -f ./kubernetes/
 ```
 
 **Use a Postgres Database**
-Update the configmap.yaml and the secrets.yaml file with your values
+
 ```bash
+# Update the configmap.yaml to DB_TYPE: "POSTGRES" and add the other DB related informations
+# Update the secrets.yaml with DB and Flask App Secret
+# Update the ingress.yaml with your host
+
 kubectl apply -f ./kubernetes/
 ```
 

@@ -1,0 +1,35 @@
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notes
+  namespace: notes 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notes
+  template:
+    metadata:
+      labels:
+        app: notes
+    spec:
+      containers:
+      - name: api
+        image: antalyse/notes
+        ports:
+        - containerPort: 5000 
+        envFrom:
+          - configMapRef:
+              name: notes                   
+        env:
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: notes                 
+                key: "DB_PASSWORD"
+          - name: FLASK_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: notes                  
+                key: "FLASK_SECRET_KEY"              
