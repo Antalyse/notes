@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f5d2.svg" type="image/svg+xml">
+    
+    <title>Register - Notes</title>
+    <meta name="description" content="Create your Notes account.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Source+Serif+Pro:wght@400;700&display=swap');
+
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --accent-color: #d0d0d0; /* Very light grey accent */
+            --subtle-border: #e0e0e0;
+            --link-color: #505050;
+            --link-hover: #000000;
+            --button-bg: #1a1a1a;
+            --button-text: #ffffff;
+            --button-hover-bg: #333333;
+            --flash-success-bg: #e6fffa;
+            --flash-success-text: #006400;
+            --flash-success-border: #b2f5ea;
+            --flash-warning-bg: #fffbeb;
+            --flash-warning-text: #b7791f;
+            --flash-warning-border: #fef3c7;
+            --flash-danger-bg: #fff5f5;
+            --flash-danger-text: #c53030;
+            --flash-danger-border: #fed7d7;
+            --flash-info-bg: #ebf8ff;
+            --flash-info-text: #2b6cb0;
+            --flash-info-border: #bee3f8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 100%;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            font-size: 1rem;
+            display: flex;
+            flex-direction: column; /* Stack content and footer */
+            justify-content: center; /* Center form vertically */
+            align-items: center; /* Center form horizontally */
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .main-content {
+            width: 100%;
+            max-width: 400px; /* Constrained width for form */
+            text-align: center;
+            flex-grow: 1; /* Allow content to take available space */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            font-family: 'Source Serif Pro', serif;
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--text-color);
+        }
+
+        .brand {
+             display: block;
+             font-weight: 700;
+             font-size: 1.5rem; /* Slightly larger brand */
+             margin-bottom: 1rem;
+             color: var(--text-color);
+             text-decoration: none;
+             border-bottom: none;
+        }
+        .brand span {
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        form {
+            width: 100%;
+            text-align: left; /* Align form elements left */
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            color: var(--link-color);
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--subtle-border);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 1rem;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--link-color);
+        }
+
+        button {
+            display: block; /* Make button block level */
+            width: 100%; /* Full width */
+            padding: 0.9rem 2rem;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 400;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem; /* Space above button */
+        }
+
+        button:hover,
+        button:focus {
+            background-color: var(--button-hover-bg);
+        }
+
+        .links {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .links a {
+            color: var(--link-color);
+            text-decoration: none;
+            border-bottom: 1px solid var(--accent-color);
+            transition: color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .links a:hover,
+        .links a:focus {
+            color: var(--link-hover);
+            border-bottom-color: var(--link-hover);
+        }
+        
+        .flash-messages {
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .flash {
+            padding: 0.8rem 1rem;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .flash.success {
+            background-color: var(--flash-success-bg);
+            color: var(--flash-success-text);
+            border-color: var(--flash-success-border);
+        }
+
+        .flash.warning {
+            background-color: var(--flash-warning-bg);
+            color: var(--flash-warning-text);
+            border-color: var(--flash-warning-border);
+        }
+
+        .flash.danger {
+            background-color: var(--flash-danger-bg);
+            color: var(--flash-danger-text);
+            border-color: var(--flash-danger-border);
+        }
+        
+        .flash.info {
+            background-color: var(--flash-info-bg);
+            color: var(--flash-info-text);
+            border-color: var(--flash-info-border);
+        }
+
+
+        footer {
+            width: 100%;
+            max-width: 400px; /* Match form width */
+            margin-top: 3rem; /* Space above footer */
+            padding-top: 1rem;
+            border-top: 1px solid var(--subtle-border);
+            font-size: 0.85rem;
+            color: var(--link-color);
+            text-align: center;
+        }
+         footer p {
+            margin-bottom: 0.3rem;
+            font-weight: 300;
+         }
+         footer .parent-company {
+            opacity: 0.8;
+         }
+
+        /* Responsive Adjustments */
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .brand {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-content">
+        <a href="/" class="brand">Notes <span>by Antalyse</span></a>
+        <h1>Register</h1>
+
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <form action="/register" method="post">
+            <div class="form-group">
+                <label for="username">Email Address</label>
+                <input type="email" id="username" name="username" placeholder="your@email.com" required value="{{ username or '' }}">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required pattern=".{8,}" title="Password must be at least 8 characters long">
+            </div>
+             <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </div>
+            {% if checks %}
+                {% if not checks.username_available %}
+                    <p style="color: #c53030; font-size: 0.9rem; margin-bottom:1rem;">Username is already taken. Please choose another.</p>
+                {% endif %}
+                {% if not checks.password_meets_policy %}
+                     <p style="color: #c53030; font-size: 0.9rem; margin-bottom:1rem;">Password does not meet security requirements (minimum 8 characters).</p>
+                {% endif %}
+            {% endif %}
+            <button type="submit">Create Account</button>
+        </form>
+
+        <div class="links">
+            <p>Already have an account? <a href="/login">Login here</a>.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p class="parent-company">Notes is a product of Antalyse.</p>
+        <p>&copy; <span id="year">2025</span> Antalyse</p>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const password = document.getElementById("password");
+        const confirm_password = document.getElementById("confirm_password");
+
+        function validatePassword(){
+          if(password.value != confirm_password.value) {
+            confirm_password.setCustomValidity("Passwords Don't Match");
+          } else {
+            confirm_password.setCustomValidity('');
+          }
+        }
+
+        if (password && confirm_password) {
+            password.onchange = validatePassword;
+            confirm_password.onkeyup = validatePassword;
+        }
+
+    </script>
+
+</body>
+</html>

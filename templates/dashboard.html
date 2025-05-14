@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/svg/1f5d2.svg" type="image/svg+xml">
+    <title>Notes by Antalyse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap');
+
+        :root {
+            --font-primary: 'Inter', sans-serif;
+            --font-monospace: 'Roboto Mono', monospace;
+
+            /* Base Black & White Theme */
+            --bg-main: #ffffff; /* Pure white background */
+            --bg-alt: #f7f7f7; /* Slightly off-white for contrast, like modal footers */
+            --bg-card: #ffffff;
+            --bg-overlay: rgba(0, 0, 0, 0.6); /* Darker overlay for modals */
+
+            --text-primary: #121212; /* Very dark grey, almost black for primary text */
+            --text-secondary: #555555; /* Medium grey for secondary text */
+            --text-tertiary: #888888; /* Lighter grey for hints, placeholders */
+            --text-on-dark-bg: #ffffff; /* White text for dark buttons */
+
+            --border-primary: #e0e0e0; /* Light grey for borders */
+            --border-interactive: #cccccc; /* Slightly darker for interactive element borders */
+            --border-focus: #007aff; /* A modern blue for focus, can be adjusted */
+
+            --accent-primary: #007aff; /* Primary accent color (e.g., links, focus rings) */
+            --accent-primary-hover: #005bb5;
+
+            --button-primary-bg: #1a1a1a; /* Black primary buttons */
+            --button-primary-text: #ffffff;
+            --button-primary-hover-bg: #333333;
+
+            --button-secondary-bg: #e9e9e9; /* Light grey secondary buttons */
+            --button-secondary-text: #333333;
+            --button-secondary-hover-bg: #dcdcdc;
+
+            --danger-bg: #e74c3c;
+            --danger-text: #ffffff;
+            --danger-hover-bg: #c0392b;
+
+            --success-bg: #2ecc71;
+            --success-text: #ffffff;
+
+            --info-bg: #3498db;
+            --info-text: #ffffff;
+
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
+
+            --border-radius-sm: 4px;
+            --border-radius-md: 8px;
+            --border-radius-lg: 12px;
+        }
+
+        html {
+            font-size: 16px; /* Base font size */
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            line-height: 1.65;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px; /* Wider for modern layouts */
+            margin: 0 auto;
+            padding: 0 2rem; /* More padding */
+        }
+
+        /* --- Header --- */
+        .header {
+            background-color: var(--bg-main);
+            padding: 1.25rem 0; /* Increased padding */
+            border-bottom: 1px solid var(--border-primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+        }
+        .header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header .brand {
+            font-weight: 800; /* Bolder */
+            font-size: 1.75rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .header .logout-link {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 0.6rem 1rem;
+            border-radius: var(--border-radius-md);
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .header .logout-link:hover {
+            color: var(--text-primary);
+            background-color: var(--button-secondary-bg);
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex-grow: 1;
+            padding-top: 2.5rem; /* More space */
+            padding-bottom: 4rem;
+        }
+
+        /* --- Action Bar & Search --- */
+        .action-bar {
+            display: flex;
+            justify-content: space-between; /* Align search to left, add note to right */
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1.5rem;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--bg-alt);
+            border-radius: var(--border-radius-md);
+            padding: 0.25rem 0.75rem;
+            border: 1px solid var(--border-interactive);
+            flex-grow: 1; /* Allow search bar to take available space */
+            max-width: 400px; /* Max width for search bar */
+        }
+        .search-bar svg {
+            color: var(--text-tertiary);
+            margin-right: 0.5rem;
+        }
+        .search-bar input[type="search"] {
+            border: none;
+            outline: none;
+            padding: 0.6rem 0.25rem;
+            font-size: 0.95rem;
+            background-color: transparent;
+            color: var(--text-primary);
+            width: 100%;
+        }
+        .search-bar input[type="search"]::placeholder {
+            color: var(--text-tertiary);
+        }
+
+
+        /* --- Buttons --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            padding: 0.75rem 1.5rem; /* Larger padding */
+            border: 1px solid transparent;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s ease-out;
+            box-shadow: var(--shadow-sm);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .btn:active {
+            transform: translateY(0px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary {
+            background-color: var(--button-primary-bg);
+            color: var(--button-primary-text);
+            border-color: var(--button-primary-bg);
+        }
+        .btn-primary:hover {
+            background-color: var(--button-primary-hover-bg);
+            border-color: var(--button-primary-hover-bg);
+        }
+
+        .btn-secondary {
+            background-color: var(--button-secondary-bg);
+            color: var(--button-secondary-text);
+            border: 1px solid var(--border-interactive);
+        }
+        .btn-secondary:hover {
+            background-color: var(--button-secondary-hover-bg);
+            border-color: #b0b0b0;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-bg);
+            color: var(--danger-text);
+        }
+        .btn-danger:hover {
+            background-color: var(--danger-hover-bg);
+        }
+        
+        .btn-icon {
+            padding: 0.6rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            line-height: 1;
+            border-radius: 50%; /* Circular icon buttons */
+            box-shadow: none;
+        }
+        .btn-icon svg {
+            width: 1.25rem; /* 20px */
+            height: 1.25rem; /* 20px */
+        }
+        .btn-icon:hover {
+            color: var(--text-primary);
+            background-color: var(--button-secondary-bg); /* Subtle background on hover */
+            transform: none; /* No lift for simple icon buttons */
+            box-shadow: none;
+        }
+        .btn-icon.delete-btn:hover {
+            color: var(--danger-bg);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        .btn-icon.edit-btn:hover {
+            color: var(--accent-primary);
+            background-color: rgba(0, 122, 255, 0.1);
+        }
+
+
+        /* --- Notes Grid & Items (Cards) --- */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Slightly larger minmax */
+            gap: 2rem; /* Increased gap */
+        }
+
+        .note-item {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--border-radius-lg); /* More rounded */
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            overflow: hidden; /* Ensure content respects border radius */
+        }
+        .note-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .note-content-wrapper {
+            padding: 1.5rem; /* 24px */
+            flex-grow: 1;
+        }
+        .note-content {
+            color: var(--text-secondary);
+            font-size: 1rem; /* Slightly larger for readability */
+            line-height: 1.7;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 220px;
+            overflow-y: auto;
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: var(--border-interactive) var(--bg-alt); /* Firefox */
+        }
+        .note-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        .note-content::-webkit-scrollbar-track {
+            background: var(--bg-alt);
+            border-radius: 10px;
+        }
+        .note-content::-webkit-scrollbar-thumb {
+            background: var(--border-interactive);
+            border-radius: 10px;
+        }
+        .note-content::-webkit-scrollbar-thumb:hover {
+            background: #aaaaaa;
+        }
+
+        .note-actions {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--bg-alt);
+            border-top: 1px solid var(--border-primary);
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .copy-feedback {
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 0.8em;
+            color: var(--success-bg);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .copy-feedback.visible {
+            opacity: 1;
+        }
+
+        /* --- No Notes Message --- */
+        #noNotesMessageContainer {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 1rem;
+            border: 2px dashed var(--border-interactive);
+            border-radius: var(--border-radius-lg);
+            background-color: var(--bg-alt);
+        }
+        #noNotesMessageContainer p {
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            margin-bottom: 1rem;
+        }
+        #noNotesMessageContainer .btn { /* Style the button inside no notes message */
+            margin-top: 0.5rem;
+        }
+
+
+        /* --- Modals --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: var(--bg-overlay);
+            padding: 2rem; /* Padding for modal to not touch edges */
+        }
+        .modal.modal--open {
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Vertically center */
+        }
+
+        .modal-content {
+            background-color: var(--bg-main);
+            width: 100%;
+            max-width: 550px; /* Slightly wider modal */
+            border-radius: var(--border-radius-lg);
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.75rem;
+            border-bottom: 1px solid var(--border-primary);
+        }
+        .modal-header h2 {
+            font-size: 1.5rem; /* Larger title */
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .close-button {
+            color: var(--text-tertiary);
+            background: none;
+            border: none;
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            font-weight: 300;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: color 0.2s ease, background-color 0.2s ease;
+        }
+        .close-button:hover {
+            color: var(--text-primary);
+            background-color: var(--button-secondary-bg);
+        }
+
+        .modal-body {
+            padding: 1.75rem;
+            flex-grow: 1;
+        }
+        .modal-body .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .modal-body label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .modal-body textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-interactive);
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            border-radius: var(--border-radius-md);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            min-height: 150px; /* Taller textarea */
+            resize: vertical; /* Allow vertical resize */
+        }
+        .modal-body textarea:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.2);
+        }
+        
+        .char-counter {
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            text-align: right;
+            margin-top: 0.3rem;
+            font-family: var(--font-monospace);
+        }
+
+        .modal-body p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding: 1.25rem 1.75rem;
+            border-top: 1px solid var(--border-primary);
+            background-color: var(--bg-alt);
+            border-bottom-left-radius: var(--border-radius-lg);
+            border-bottom-right-radius: var(--border-radius-lg);
+        }
+        
+        /* --- Toast Notifications --- */
+        #toastContainer {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .toast-message {
+            padding: 1rem 1.5rem;
+            border-radius: var(--border-radius-md);
+            color: var(--text-on-dark-bg);
+            font-size: 0.95rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transform: translateX(110%); /* Start off-screen */
+            transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .toast-message svg { /* For icons in toasts */
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+        .toast-message.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .toast-message.success { background-color: var(--success-bg); }
+        .toast-message.error { background-color: var(--danger-bg); }
+        .toast-message.info { background-color: var(--info-bg); }
+
+        /* Scroll to Top Button */
+        #scrollToTopBtn {
+            display: none; /* Hidden by default */
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            background-color: var(--button-primary-bg);
+            color: var(--button-primary-text);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+            transition: background-color 0.2s, opacity 0.3s, transform 0.3s;
+        }
+        #scrollToTopBtn:hover {
+            background-color: var(--button-primary-hover-bg);
+            transform: scale(1.1);
+        }
+        #scrollToTopBtn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 0 1.5rem; }
+            .header .brand { font-size: 1.5rem; }
+            .action-bar { flex-direction: column; align-items: stretch; }
+            .search-bar { max-width: 100%; }
+            .notes-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+            .modal-content { width: 90%; margin: auto; }
+            .modal { padding: 1rem; align-items: flex-start; padding-top: 5%;}
+        }
+        @media (max-width: 480px) {
+            html { font-size: 15px; }
+            .container { padding: 0 1rem; }
+            .header .brand { font-size: 1.3rem; }
+            .header-actions { gap: 0.5rem; }
+            .header-actions .btn, .header .logout-link { padding: 0.5rem 0.8rem; font-size: 0.85rem; }
+            .notes-grid { grid-template-columns: 1fr; gap: 1rem; }
+            .modal-body, .modal-header, .modal-footer { padding: 1.25rem; }
+            .modal-header h2 { font-size: 1.25rem; }
+            .btn { font-size: 0.9rem; padding: 0.6rem 1.2rem; }
+            #toastContainer { right: 15px; bottom: 15px; }
+            .toast-message { padding: 0.8rem 1.2rem; }
+            #scrollToTopBtn { width: 45px; height: 45px; bottom: 15px; right: 15px; }
+            #scrollToTopBtn svg { width: 20px; height: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="container">
+            <a href="{{ url_for('dashboard') }}" class="brand">My Notes</a>
+            <div class="header-actions">
+                <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="action-bar">
+                <div class="search-bar">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                    <input type="search" id="searchInput" placeholder="Search notes...">
+                </div>
+                 <button id="openAddNoteModalBtn" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                    </svg>
+                    Add Note
+                </button>
+            </div>
+
+            <div id="notesGrid" class="notes-grid">
+                {% if notes %}
+                    {% for note in notes %}
+                    <div class="note-item" data-note-id="{{ note.id }}" data-note-content="{{ note.note|escape }}">
+                        <div class="note-content-wrapper">
+                            <p class="note-content">{{ note.note }}</p>
+                        </div>
+                        <div class="note-actions">
+                             <button onclick="openEditModal('{{ note.id }}', `{{ note.note|replace('\r\n', '\\n')|replace('\n', '\\n')|escape }}`)" class="btn-icon edit-btn" title="Edit note">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                  <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                                  <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                            <button onclick="copyNoteContent(this, `{{ note.note|replace('\r\n', '\\n')|replace('\n', '\\n')|escape }}`)" class="btn-icon copy-btn" title="Copy note">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                                    <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+                                </svg>
+                                
+                            </button>
+                            <button onclick="openDeleteModal('{{ note.id }}')" class="btn-icon delete-btn" title="Delete note">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                </div>
+        </div>
+    </main>
+
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="noteModalTitle">Add New Note</h2>
+                <button class="close-button" id="closeNoteModalBtn">&times;</button>
+            </div>
+            <form id="noteForm">
+                <input type="hidden" id="noteIdInput" name="noteId">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="noteInput">Note Content</label>
+                        <textarea id="noteInput" name="note" rows="8" placeholder="Type your thoughts here..."></textarea>
+                        <div id="charCounter" class="char-counter">0 / 2000</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="cancelNoteBtn" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" id="saveNoteBtn" class="btn btn-primary">Add Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Deletion</h2>
+                <button class="close-button" id="closeDeleteModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this note? This action is permanent and cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="cancelDeleteBtn" class="btn btn-secondary">Cancel</button>
+                <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete Note</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toastContainer"></div>
+
+    <button id="scrollToTopBtn" title="Go to top">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
+        </svg>
+    </button>
+
+    <script>
+        // --- DOM Elements ---
+        const openAddNoteModalBtn = document.getElementById('openAddNoteModalBtn');
+        const noteModal = document.getElementById('noteModal'); // Combined Add/Edit Modal
+        const closeNoteModalBtn = document.getElementById('closeNoteModalBtn');
+        const noteForm = document.getElementById('noteForm');
+        const noteModalTitle = document.getElementById('noteModalTitle');
+        const noteInput = document.getElementById('noteInput');
+        const noteIdInput = document.getElementById('noteIdInput'); // For editing
+        const charCounter = document.getElementById('charCounter');
+        const cancelNoteBtn = document.getElementById('cancelNoteBtn');
+        const saveNoteBtn = document.getElementById('saveNoteBtn');
+        
+        const notesGrid = document.getElementById('notesGrid');
+        const searchInput = document.getElementById('searchInput');
+        
+        const deleteConfirmModal = document.getElementById('deleteConfirmModal');
+        const closeDeleteModalBtn = document.getElementById('closeDeleteModalBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        let noteIdToDelete = null;
+
+        const toastContainer = document.getElementById('toastContainer');
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        const MAX_NOTE_LENGTH = 2000; // Max characters for a note
+
+        // --- Toast Notification Icons ---
+        const ICONS = {
+            success: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            error: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>`,
+            info: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" /></svg>`,
+        };
+
+        // --- Toast Notification ---
+        function showToast(message, type = 'info') { // Default to info
+            const toast = document.createElement('div');
+            toast.className = `toast-message ${type}`;
+            toast.innerHTML = `${ICONS[type] || ''}<span>${message}</span>`;
+            toastContainer.appendChild(toast);
+
+            requestAnimationFrame(() => { // Ensures transition is applied
+                toast.classList.add('show');
+            });
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // --- Modal Helper Functions ---
+        function openModal(modalElement) {
+            if (modalElement) {
+                modalElement.classList.add('modal--open');
+                document.body.style.overflow = 'hidden'; // Prevent background scroll
+                const focusable = modalElement.querySelector('textarea, button, [href], input, select, [tabindex]:not([tabindex="-1"])');
+                if (focusable) {
+                    setTimeout(() => focusable.focus(), 50); // Delay focus slightly for transition
+                }
+            }
+        }
+
+        function closeModal(modalElement) {
+            if (modalElement) {
+                modalElement.classList.remove('modal--open');
+                document.body.style.overflow = ''; // Restore scroll
+            }
+        }
+
+        // --- Character Counter ---
+        if (noteInput) {
+            noteInput.addEventListener('input', () => {
+                const currentLength = noteInput.value.length;
+                charCounter.textContent = `${currentLength} / ${MAX_NOTE_LENGTH}`;
+                if (currentLength > MAX_NOTE_LENGTH) {
+                    charCounter.style.color = 'var(--danger-bg)';
+                } else {
+                    charCounter.style.color = 'var(--text-tertiary)';
+                }
+            });
+        }
+        
+        // --- Add/Edit Note Functionality ---
+        function setupAddNoteModal() {
+            noteModalTitle.textContent = 'Add New Note';
+            saveNoteBtn.textContent = 'Add Note';
+            noteForm.reset();
+            noteIdInput.value = ''; // Clear any potential edit ID
+            charCounter.textContent = `0 / ${MAX_NOTE_LENGTH}`;
+            charCounter.style.color = 'var(--text-tertiary)';
+            // Restore draft if exists
+            const draft = localStorage.getItem('noteDraft');
+            if (draft) {
+                noteInput.value = draft;
+                noteInput.dispatchEvent(new Event('input')); // Trigger char count update
+            }
+            openModal(noteModal);
+            noteInput.focus();
+        }
+
+        if (openAddNoteModalBtn) {
+            openAddNoteModalBtn.addEventListener('click', setupAddNoteModal);
+        }
+        if (closeNoteModalBtn) {
+            closeNoteModalBtn.addEventListener('click', () => {
+                closeModal(noteModal);
+                // Save draft on manual close if content exists
+                if (noteInput.value.trim().length > 0 && !noteIdInput.value) { // Only for new notes
+                    localStorage.setItem('noteDraft', noteInput.value);
+                    showToast('Draft saved!', 'info');
+                } else {
+                    localStorage.removeItem('noteDraft'); // Clear draft if submitted or empty
+                }
+            });
+        }
+        if (cancelNoteBtn) {
+            cancelNoteBtn.addEventListener('click', () => {
+                closeModal(noteModal);
+                if (noteInput.value.trim().length > 0 && !noteIdInput.value) {
+                     localStorage.setItem('noteDraft', noteInput.value);
+                     showToast('Draft saved!', 'info');
+                } else {
+                    localStorage.removeItem('noteDraft');
+                }
+            });
+        }
+
+        if (noteForm) {
+            noteForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                const noteContent = noteInput.value.trim();
+                const noteId = noteIdInput.value; 
+
+                if (!noteContent) {
+                    showToast('Note content cannot be empty.', 'error');
+                    noteInput.focus();
+                    return;
+                }
+                if (noteContent.length > MAX_NOTE_LENGTH) {
+                    showToast(`Note cannot exceed ${MAX_NOTE_LENGTH} characters.`, 'error');
+                    noteInput.focus();
+                    return;
+                }
+
+                // Determine URL and method based on whether it's an add or edit
+                const isEditing = !!noteId;
+                const url = isEditing ? `/route/edit/${noteId}` : '{{ url_for("add_note") }}';
+                const method = isEditing ? 'PUT' : 'POST'; // Assuming PUT for edit
+
+                try {
+                    // Show loading state on button
+                    saveNoteBtn.disabled = true;
+                    saveNoteBtn.innerHTML = isEditing ? 
+                        `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Saving...` :
+                        `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Adding...`;
+
+
+                    const response = await fetch(url, {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded', // Or application/json if backend expects it
+                        },
+                        body: new URLSearchParams({ 'note': noteContent })
+                    });
+
+                    if (response.ok) {
+                        localStorage.removeItem('noteDraft'); 
+                        window.location.reload(); 
+                    } else {
+                        const errorData = await response.json().catch(() => ({ message: `Failed to ${isEditing ? 'update' : 'add'} note. Server error.` }));
+                        showToast(errorData.message || `Failed to ${isEditing ? 'update' : 'add'} note.`, 'error');
+                    }
+                } catch (error) {
+                    console.error(`Error ${isEditing ? 'updating' : 'adding'} note:`, error);
+                    showToast(`An error occurred while ${isEditing ? 'updating' : 'adding'} the note.`, 'error');
+                } finally {
+                    saveNoteBtn.disabled = false;
+                    saveNoteBtn.innerHTML = isEditing ? 'Save Changes' : 'Add Note';
+                }
+            });
+        }
+
+        // --- Edit Note Functionality (Open Modal) ---
+        window.openEditModal = (noteId, currentContent) => {
+            noteModalTitle.textContent = 'Edit Note';
+            saveNoteBtn.textContent = 'Save Changes';
+            noteForm.reset(); 
+            
+            const decodedContent = currentContent.replace(/\\n/g, '\n').replace(/\\r/g, '\r');
+            noteInput.value = decodedContent;
+            noteIdInput.value = noteId;
+            
+            noteInput.dispatchEvent(new Event('input'));
+            
+            openModal(noteModal);
+            noteInput.focus();
+            noteInput.setSelectionRange(decodedContent.length, decodedContent.length); // Move cursor to end
+        };
+
+        // --- Delete Note Functionality ---
+        window.openDeleteModal = (noteId) => {
+            noteIdToDelete = noteId;
+            openModal(deleteConfirmModal);
+        }
+
+        if (closeDeleteModalBtn) {
+            closeDeleteModalBtn.addEventListener('click', () => {
+                closeModal(deleteConfirmModal);
+                noteIdToDelete = null;
+            });
+        }
+        if (cancelDeleteBtn) {
+            cancelDeleteBtn.addEventListener('click', () => {
+                closeModal(deleteConfirmModal);
+                noteIdToDelete = null;
+            });
+        }
+        
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', async () => {
+                if (!noteIdToDelete) return;
+                
+                confirmDeleteBtn.disabled = true;
+                confirmDeleteBtn.innerHTML = `<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Deleting...`;
+
+                try {
+                    const response = await fetch(`/route/delete/${noteIdToDelete}`, {
+                        method: 'DELETE',
+                    });
+
+                    if (response.ok) {
+                        const noteCard = document.querySelector(`.note-item[data-note-id="${noteIdToDelete}"]`);
+                        if (noteCard) {
+                            noteCard.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                            noteCard.style.opacity = '0';
+                            noteCard.style.transform = 'scale(0.95)';
+                            setTimeout(() => {
+                                noteCard.remove();
+                                checkAndShowNoNotesMessage();
+                            }, 300);
+                        }
+                        showToast('Note deleted successfully!', 'success');
+                    } else {
+                        const errorData = await response.json().catch(() => ({ message: 'Failed to delete note. Server error.' }));
+                        showToast(errorData.message || 'Failed to delete note.', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error deleting note:', error);
+                    showToast('An error occurred while deleting the note.', 'error');
+                } finally {
+                    closeModal(deleteConfirmModal);
+                    noteIdToDelete = null;
+                    confirmDeleteBtn.disabled = false;
+                    confirmDeleteBtn.textContent = 'Delete Note';
+                }
+            });
+        }
+
+        // --- Copy Note Functionality ---
+        window.copyNoteContent = (buttonElement, textToCopy) => {
+            const processedText = textToCopy.replace(/\\n/g, '\n').replace(/\\r/g, '\r');
+            const feedbackElement = buttonElement.querySelector('.copy-feedback');
+
+            navigator.clipboard.writeText(processedText)
+                .then(() => {
+                    if (feedbackElement) {
+                        feedbackElement.classList.add('visible');
+                        setTimeout(() => {
+                            feedbackElement.classList.remove('visible');
+                        }, 2000);
+                    } else { // Fallback if structure changes
+                        showToast('Copied to clipboard!', 'info');
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    showToast('Failed to copy text. Try manually.', 'error');
+                });
+        }
+
+        // --- Search/Filter Notes ---
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const noteItems = notesGrid.querySelectorAll('.note-item');
+                let visibleNotes = 0;
+                noteItems.forEach(item => {
+                    const noteText = item.dataset.noteContent.toLowerCase(); // Use data attribute for original content
+                    if (noteText.includes(searchTerm)) {
+                        item.style.display = '';
+                        visibleNotes++;
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+                checkAndShowNoNotesMessage(searchTerm && visibleNotes === 0);
+            });
+        }
+
+        // --- "No Notes" Message Handling ---
+        function checkAndShowNoNotesMessage(isSearchNoResults = false) {
+            const existingMessage = document.getElementById('noNotesMessageContainer');
+            if (existingMessage) existingMessage.remove();
+
+            const noteItems = notesGrid.querySelectorAll('.note-item:not([style*="display: none"])'); // Count only visible notes
+            
+            if (noteItems.length === 0) {
+                const messageContainer = document.createElement('div');
+                messageContainer.id = 'noNotesMessageContainer';
+                
+                let messageText = `You don't have any notes yet.`;
+                if (isSearchNoResults) {
+                    messageText = `No notes found matching your search term.`;
+                }
+
+                messageContainer.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="var(--text-tertiary)" viewBox="0 0 256 256" style="margin:0 auto 1rem auto; opacity: 0.7;">
+                        <path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM160,88a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16h48A8,8,0,0,1,160,88Zm0,32a8,8,0,0,1-8,8H104a8,8,0,0,1,0-16h48A8,8,0,0,1,160,120Z"></path>
+                    </svg>
+                    <p>${messageText}</p>
+                    ${!isSearchNoResults ? '<button id="noNotesAddBtn" class="btn btn-primary">Create Your First Note</button>' : ''}
+                `;
+                notesGrid.appendChild(messageContainer);
+
+                if (!isSearchNoResults) {
+                    document.getElementById('noNotesAddBtn').addEventListener('click', setupAddNoteModal);
+                }
+            }
+        }
+
+        // --- Scroll to Top Button Functionality ---
+        window.onscroll = function() {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                scrollToTopBtn.style.display = "block";
+                scrollToTopBtn.style.opacity = "1";
+            } else {
+                scrollToTopBtn.style.opacity = "0";
+                setTimeout(() => { // Hide after fade out
+                     if (!(document.body.scrollTop > 100 || document.documentElement.scrollTop > 100)) {
+                        scrollToTopBtn.style.display = "none";
+                     }
+                }, 300);
+            }
+        };
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+
+
+        // --- Global Event Listeners (Modals, Escape key) ---
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) { // Clicked on the .modal overlay itself
+                if (event.target === noteModal) {
+                    closeModal(noteModal);
+                     if (noteInput.value.trim().length > 0 && !noteIdInput.value) {
+                         localStorage.setItem('noteDraft', noteInput.value);
+                         showToast('Draft saved!', 'info');
+                    } else {
+                        localStorage.removeItem('noteDraft');
+                    }
+                }
+                if (event.target === deleteConfirmModal) {
+                    closeModal(deleteConfirmModal);
+                    noteIdToDelete = null;
+                }
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                if (noteModal.classList.contains('modal--open')) {
+                    closeModal(noteModal);
+                     if (noteInput.value.trim().length > 0 && !noteIdInput.value) {
+                         localStorage.setItem('noteDraft', noteInput.value);
+                         showToast('Draft saved!', 'info');
+                    } else {
+                        localStorage.removeItem('noteDraft');
+                    }
+                }
+                if (deleteConfirmModal.classList.contains('modal--open')) {
+                    closeModal(deleteConfirmModal);
+                    noteIdToDelete = null;
+                }
+            }
+        });
+        
+        // --- Initial Setup ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialNotes = notesGrid.querySelectorAll('.note-item');
+            if (initialNotes.length === 0 && !document.getElementById('noNotesMessageContainer')) {
+                 const noNotesJinjaPlaceholder = document.getElementById('noNotesMessage'); // From original HTML
+                 if (noNotesJinjaPlaceholder) noNotesJinjaPlaceholder.remove(); // Remove old placeholder if it exists
+                 checkAndShowNoNotesMessage();
+            } else if (initialNotes.length > 0) {
+                const noNotesJinjaPlaceholder = document.getElementById('noNotesMessage');
+                if (noNotesJinjaPlaceholder) noNotesJinjaPlaceholder.remove();
+            }
+
+        });
+
+    </script>
+</body>
+</html>
