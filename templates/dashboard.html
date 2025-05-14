@@ -563,6 +563,7 @@
         <div class="container">
             <a href="{{ url_for('dashboard') }}" class="brand">My Notes</a>
             <div class="header-actions">
+                <a href="https://donate.app4notes.com" class="logout-link">Donate</a>
                 <a href="{{ url_for('logout') }}" class="logout-link">Logout</a>
             </div>
         </div>
@@ -631,7 +632,7 @@
                     <div class="form-group">
                         <label for="noteInput">Note Content</label>
                         <textarea id="noteInput" name="note" rows="8" placeholder="Type your thoughts here..."></textarea>
-                        <div id="charCounter" class="char-counter">0 / 2000</div>
+                        <div id="charCounter" class="char-counter">0 / {{ maximum_note_length }}</div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -690,7 +691,7 @@
 
         const toastContainer = document.getElementById('toastContainer');
         const scrollToTopBtn = document.getElementById('scrollToTopBtn');
-        const MAX_NOTE_LENGTH = 2000; // Max characters for a note
+        const MAX_NOTE_LENGTH = {{ maximum_note_length }}; // Max characters for a note
 
         // --- Toast Notification Icons ---
         const ICONS = {

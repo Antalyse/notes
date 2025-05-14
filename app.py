@@ -11,9 +11,10 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "your_very_secret_key_12345")
 
 db_type = os.environ.get('DB_TYPE', "LOCAL")
+maximum_note_length = int(os.environ.get('MAXIMUM_NOTE_LENGTH', '4000'))
 
 if db_type == "LOCAL":
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI", "sqlite:///masscms.db")  
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URI", "sqlite:///notes.db")  
 elif db_type == "POSTGRES":
     db_service = os.environ.get('DB_SERVICE')
     db_name = os.environ.get('DB_NAME')
@@ -183,7 +184,7 @@ def dashboard():
         current_app.logger.error(f"Error fetching notes for user {current_user.id}: {e}")
         notes = []
         flash("Could not load your notes at this time.", "error")
-    return render_template('dashboard.html', notes=notes)
+    return render_template('dashboard.html', notes=notes, maximum_note_length=maximum_note_length)
 
 
 @app.route('/add-note', methods=['POST']) 
@@ -196,8 +197,8 @@ def add_note():
             flash('Note content cannot be empty.', 'warning')
             return redirect(url_for('dashboard')) 
 
-        if len(note_content) > 2000: 
-             flash(f'Note cannot exceed 2000 characters. Yours has {len(note_content)}.', 'warning')
+        if len(note_content) > maximum_note_length: 
+             flash(f'Note cannot exceed {maximum_note_length} characters. Yours has {len(note_content)}.', 'warning')
              return redirect(url_for('dashboard'))
 
 
@@ -235,8 +236,8 @@ def edit_note(note_id):
         if not trimmed_content:
             return jsonify({"message": "Note content cannot be empty."}), 400 
         
-        if len(trimmed_content) > 2000: 
-            return jsonify({"message": f"Note cannot exceed 2000 characters. Yours has {len(trimmed_content)}."}), 400
+        if len(trimmed_content) > maximum_note_length: 
+            return jsonify({"message": f"Note cannot exceed {maximum_note_length} characters. Yours has {len(trimmed_content)}."}), 400
 
 
         try:
