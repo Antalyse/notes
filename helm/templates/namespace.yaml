@@ -1,0 +1,8 @@
+{{- if .Values.notesApp.namespace }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.notesApp.namespace }}
+  labels:
+    {{- include "notes-app.labels" . | nindent 4 }}
+{{- end }}

@@ -1,0 +1,91 @@
+# Default values for notes-app chart.
+replicaCount: 1
+
+image:
+  repository: antalyse/notes
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 5000
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    # cert-manager.io/renew-before: 360h # You can uncomment and adjust if needed
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: example.com # Make sure to change this to your actual domain
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+   - secretName: notes-tls # Ensure this secret is created by cert-manager or manually
+     hosts:
+       - example.com # Make sure to change this to your actual domain
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Application specific configurations
+notesApp:
+  namespace: "notes"
+  config:
+    DB_TYPE: "LOCAL" # LOCAL | POSTGRES
+    DB_SERVICE: "my.db-service.url"
+    DB_NAME: "postgres"
+    DB_USER: "root"
+    DB_PORT: "5432"
+    MAXIMUM_NOTE_LENGTH: "4000"
+  secrets:
+    # These should be base64 encoded.
+    # Example: echo -n "your-secret-value" | base64
+    FLASK_SECRET_KEY: "eW91ci1iYXNlNjQtZW5jb2RlZC1zZWNyZXQ=" # Default: your-base64-encoded-secret
+    DB_PASSWORD: "eW91ci1iYXNlNjQtZW5jb2RlZC1zZWNyZXQ="    # Default: your-base64-encoded-secret
+
+flaskDebug: false # Set to true for Flask debug mode in app.py
+
+# Name for the ConfigMap and Secret resources
+resourceName: "notes"
