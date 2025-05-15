@@ -7,3 +7,4 @@ appVersion: "1.0.0" # Your application's version
 maintainers:
   - name: Antalyse DevOps
     email: devops-helm@antalyse.com
+repositoryID: a5ed3886-27cc-45de-9d0d-809e64b8058a
