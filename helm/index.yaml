@@ -1,0 +1,17 @@
+apiVersion: v1
+entries:
+  notes-app:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-05-15T02:20:01.367116724+02:00"
+    description: A Helm chart for the Notes application
+    digest: 4475fc305a838c8dda9ce2aa46262ee3b9e41e242af2a40cd7ecbbce474fd368
+    maintainers:
+    - email: devops-helm@antalyse.com
+      name: Antalyse DevOps
+    name: notes-app
+    type: application
+    urls:
+    - https://antalyse.github.io/notes/helm/notes-app-0.1.0.tgz
+    version: 0.1.0
+generated: "2025-05-15T02:20:01.366750998+02:00"
